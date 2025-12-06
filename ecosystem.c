@@ -122,14 +122,11 @@ int main(int argc, char *argv[]) {
             
             // ================= PHASE 1: RABBITS =================
             // Input: grid1, Output: grid2
-            
             #pragma omp for
             for (int k = 0; k < R * C; k++) {
                 // Initialize grid2 with static elements from grid1
-                if (grid1[k].type == ROCK) {
-                    grid2[k] = grid1[k];
-                } else if (grid1[k].type == FOX) {
-                    grid2[k] = grid1[k];
+                if (grid1[k].type == ROCK || grid1[k].type == FOX) {
+                    grid2[k] = grid1[k]; 
                 } else {
                     grid2[k].type = EMPTY;
                     grid2[k].proc_age = 0;
@@ -171,7 +168,7 @@ int main(int argc, char *argv[]) {
                         // Procreation Logic
                         int new_proc_age = current_proc_age + 1;
                         int baby = 0;
-                        if (moved && new_proc_age > GEN_PROC_RABBITS) {
+                        if (moved && new_proc_age >= GEN_PROC_RABBITS) {
                             baby = 1;
                             new_proc_age = 0;
                         }
@@ -206,9 +203,7 @@ int main(int argc, char *argv[]) {
             #pragma omp for
             for (int k = 0; k < R * C; k++) {
                 // Initialize grid1 with static elements from grid2
-                if (grid2[k].type == ROCK) {
-                    grid1[k] = grid2[k];
-                } else if (grid2[k].type == RABBIT) {
+                if (grid2[k].type == ROCK || grid2[k].type == RABBIT) {
                     grid1[k] = grid2[k];
                 } else {
                     grid1[k].type = EMPTY;
@@ -251,7 +246,7 @@ int main(int argc, char *argv[]) {
                             ate = 1;
                         } else {
                             // No rabbit. Check starvation.
-                            if (current_food_age + 1 >= GEN_FOOD_FOXES) {
+                            if (current_food_age >= GEN_FOOD_FOXES) {
                                 // Die. Don't put in grid1.
                                 continue;
                             }
@@ -284,7 +279,7 @@ int main(int argc, char *argv[]) {
                         int new_food_age = ate ? 0 : current_food_age + 1;
                         int baby = 0;
 
-                        if (moved && new_proc_age > GEN_PROC_FOXES) {
+                        if (moved && new_proc_age >= GEN_PROC_FOXES) {
                             baby = 1;
                             new_proc_age = 0;
                         }
