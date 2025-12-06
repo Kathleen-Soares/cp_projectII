@@ -329,7 +329,7 @@ int main(int argc, char *argv[]) {
             else if (grid1[idx].type == FOX) printf("FOX %d %d\n", i, j);
         }
     }
-    fprintf(stderr, "Execution Time: %f seconds\n", end_time - start_time);
+    fprintf(stderr, "Execution Time: %f milliseconds\n", (end_time - start_time) * 1000);
     destroy_grids();
     return 0;
 }
