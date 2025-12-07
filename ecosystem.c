@@ -126,9 +126,7 @@ int main(int argc, char *argv[]) {
             #pragma omp for
             for (int k = 0; k < R * C; k++) {
                 // Initialize grid2 with static elements from grid1
-                if (grid1[k].type == ROCK) {
-                    grid2[k] = grid1[k];
-                } else if (grid1[k].type == FOX) {
+                if (grid1[k].type == ROCK || grid1[k].type == FOX) {
                     grid2[k] = grid1[k];
                 } else {
                     grid2[k].type = EMPTY;
@@ -206,9 +204,7 @@ int main(int argc, char *argv[]) {
             #pragma omp for
             for (int k = 0; k < R * C; k++) {
                 // Initialize grid1 with static elements from grid2
-                if (grid2[k].type == ROCK) {
-                    grid1[k] = grid2[k];
-                } else if (grid2[k].type == RABBIT) {
+                if (grid2[k].type == ROCK || grid2[k].type == RABBIT) {
                     grid1[k] = grid2[k];
                 } else {
                     grid1[k].type = EMPTY;
