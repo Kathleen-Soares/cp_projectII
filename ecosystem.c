@@ -17,7 +17,7 @@ typedef struct {
     int food_age;
 } Cell;
 
-int GEN_PROC_RABBITS, GEN_PROC_FOXES, GEN_FOOD_FOXES, N_GENM, R, C, N;
+int GEN_PROC_RABBITS, GEN_PROC_FOXES, GEN_FOOD_FOXES, N_GEN, R, C, N;
 Cell *grid1;
 Cell *grid2;
 omp_lock_t locks[LOCK_SIZE];
@@ -93,7 +93,7 @@ int main(int argc, char *argv[]) {
     }
 
     // Read input
-    if (scanf("%d %d %d %d %d %d %d", &GEN_PROC_RABBITS, &GEN_PROC_FOXES, &GEN_FOOD_FOXES, &N_GENM, &R, &C, &N) != 7) {
+    if (scanf("%d %d %d %d %d %d %d", &GEN_PROC_RABBITS, &GEN_PROC_FOXES, &GEN_FOOD_FOXES, &N_GEN, &R, &C, &N) != 7) {
         return 1;
     }
 
@@ -118,7 +118,7 @@ int main(int argc, char *argv[]) {
 
     #pragma omp parallel
     {
-        for (int gen = 0; gen < N_GENM; gen++) {
+        for (int gen = 0; gen < N_GEN; gen++) {
             
             // ================= PHASE 1: RABBITS =================
             // Input: grid1, Output: grid2
