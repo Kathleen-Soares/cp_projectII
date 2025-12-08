@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <omp.h>
+#include <time.h>
 
 #define EMPTY 0
 #define ROCK 1
@@ -17,7 +18,7 @@ typedef struct {
     int food_age;
 } Cell;
 
-int GEN_PROC_RABBITS, GEN_PROC_FOXES, GEN_FOOD_FOXES, N_GENM, R, C, N;
+int GEN_PROC_RABBITS, GEN_PROC_FOXES, GEN_FOOD_FOXES, N_GEN, R, C, N;
 Cell *grid1;
 Cell *grid2;
 omp_lock_t locks[LOCK_SIZE];
@@ -93,7 +94,7 @@ int main(int argc, char *argv[]) {
     }
 
     // Read input
-    if (scanf("%d %d %d %d %d %d %d", &GEN_PROC_RABBITS, &GEN_PROC_FOXES, &GEN_FOOD_FOXES, &N_GENM, &R, &C, &N) != 7) {
+    if (scanf("%d %d %d %d %d %d %d", &GEN_PROC_RABBITS, &GEN_PROC_FOXES, &GEN_FOOD_FOXES, &N_GEN, &R, &C, &N) != 7) {
         return 1;
     }
 
@@ -118,7 +119,7 @@ int main(int argc, char *argv[]) {
 
     #pragma omp parallel
     {
-        for (int gen = 0; gen < N_GENM; gen++) {
+        for (int gen = 0; gen < N_GEN; gen++) {
             
             // ================= PHASE 1: RABBITS =================
             // Input: grid1, Output: grid2
@@ -204,9 +205,7 @@ int main(int argc, char *argv[]) {
             #pragma omp for
             for (int k = 0; k < R * C; k++) {
                 // Initialize grid1 with static elements from grid2
-                if (grid2[k].type == ROCK) {
-                    grid1[k] = grid2[k];
-                } else if (grid2[k].type == RABBIT) {
+                if (grid2[k].type == ROCK || grid2[k].type == RABBIT) {
                     grid1[k] = grid2[k];
                 } else {
                     grid1[k].type = EMPTY;
@@ -312,7 +311,7 @@ int main(int argc, char *argv[]) {
         }
     }
     double end_time = omp_get_wtime(); // End timing
-
+    double elapsed_ms = ((double)(end_time - start_time)) * 1000.0;
     // Print Output
     int count = 0;
     for(int i=0; i<R*C; i++) if(grid1[i].type != EMPTY) count++;
@@ -327,7 +326,7 @@ int main(int argc, char *argv[]) {
             else if (grid1[idx].type == FOX) printf("FOX %d %d\n", i, j);
         }
     }
-    fprintf(stderr, "Execution Time: %f milliseconds\n", (end_time - start_time) * 1000);
+    fprintf(stderr, "Execution Time: %f milliseconds\n", elapsed_ms);
     destroy_grids();
     return 0;
 }
