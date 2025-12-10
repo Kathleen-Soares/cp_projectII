@@ -43,6 +43,7 @@ void destroy_grids() {
 }
 
 int get_adjacent_index(int gen, int r, int c, int p_count) {
+    // Calculate adjacent index with wrap-around
     return (gen + r + c) % p_count;
 }
 

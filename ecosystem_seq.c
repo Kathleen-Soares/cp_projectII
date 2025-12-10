@@ -34,6 +34,7 @@ void destroy_grids() {
 }
 
 int get_adjacent_index(int gen, int r, int c, int p_count) {
+    // Calculate adjacent index with wrap-around
     return (gen + r + c) % p_count;
 }
 
@@ -60,7 +61,7 @@ void solve_fox_conflict(Cell *dest, int proc_age, int food_age) {
                 dest->food_age = food_age;
             }
         }
-    } else { //subscribe empty or rabbit
+    } else { // Overwrite empty or rabbit
         dest->type = FOX;
         dest->proc_age = proc_age;
         dest->food_age = food_age;
